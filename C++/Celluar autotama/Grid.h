@@ -7,9 +7,10 @@ class Grid
 private:
     Cell edge;
     Cell** universe;
+    uint16_t gridsize;
 public:
     Grid(uint16_t size = 32,CellStates Gridborder = VOID,CellStates startingstate = EMPTY);
-    //~Grid();
+    ~Grid();
     // change a single cell on the grid
     bool ChangeCell(uint16_t x,uint16_t y,CellStates newstate);
     // steps the simulation 1 into the future

@@ -1,15 +1,16 @@
 #include "Grid.h"
-#define test
+#include "Cells.h"
+//#define test
 
 
 Grid::Grid(uint16_t size ,CellStates Gridborder ,CellStates startingstate){
-    
+    gridsize = size;
     edge.CurrentState = Gridborder;
     universe = new Cell*[size];
-    for (size_t i = 0; i < size; i++)
+    for (uint16_t i = 0; i < size; i++)
     {
-        universe[i] = new Cell[size,startingstate];
-        for (size_t j = 0; j < size; j++)
+        universe[i] = new (startingstate) Cell[size];
+        for (uint16_t j = 0; j < size; j++)
         {
             universe[i][j].CurrentState = startingstate;
             // border logic
@@ -51,9 +52,13 @@ Grid::Grid(uint16_t size ,CellStates Gridborder ,CellStates startingstate){
     }   
 }
 
-//Grid::~Grid(){
-    //delete universe;
-//}
+Grid::~Grid(){
+    for (uint16_t i = 0; i < gridsize; i++)
+    {
+        delete[](universe[i]);
+    }
+    delete universe;
+}
 
 
 
