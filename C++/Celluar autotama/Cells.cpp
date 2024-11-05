@@ -21,7 +21,8 @@ void Cell::readNeighbor()
             }
             else
             {
-                NeighborStates[i] = NESWcells[i]->CurrentState;
+                std::cout<<NESWcells[i]->CurrentState;
+                //NeighborStates[i] = NESWcells[i]->CurrentState;
             }
         }
     }
@@ -87,10 +88,6 @@ void Cell::Changestate(CellStates newstate)
 }
 
 bool Cell::CellBehavior(){
-    if (CurrentState < 0)
-    {
-        return true;
-    }
     readNeighbor();
     uint8_t AliveBuds = 0;
     for (uint8_t i = 0; i < 4; i++)

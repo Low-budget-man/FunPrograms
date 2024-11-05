@@ -75,7 +75,12 @@ void Grid::step(){
     }
 }
 
-
+bool Grid::ChangeCell(uint16_t x,uint16_t y,CellStates newstate){
+    y = y%(gridsize);
+    x = x%(gridsize);
+    universe[y][x].CurrentState = newstate;
+    return true;
+}
 
 
 
