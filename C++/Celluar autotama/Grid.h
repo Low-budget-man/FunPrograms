@@ -16,6 +16,9 @@ public:
     // steps the simulation 1 into the future
     void step();
 
+    // operators
+    friend std::ostream& operator<<(std::ostream& os, const Grid& Gr);
+
 };
 
 

@@ -3,6 +3,7 @@
 #include <iostream>
 int main(int argc, char const *argv[])
 {
-    Grid x;
+    Grid A(5,VOID,DEAD);
+    std::cout<<A;
     return 0;
 }

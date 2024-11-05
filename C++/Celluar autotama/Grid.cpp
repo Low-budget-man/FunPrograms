@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "Cells.h"
+#include <iostream>
 //#define test
 
 
@@ -55,9 +56,23 @@ Grid::Grid(uint16_t size ,CellStates Gridborder ,CellStates startingstate){
 Grid::~Grid(){
     for (uint16_t i = 0; i < gridsize; i++)
     {
-        delete[](universe[i]);
+        delete[] universe[i];
     }
-    delete universe;
+    delete[] universe;
+}
+
+void Grid::step(){
+    //very slow update algo can speed up later
+    for (uint16_t i = 0; i < gridsize; i++){
+        for (uint16_t j = 0; j < gridsize; j++){
+            universe[i][j].CellBehavior();
+        }
+    }
+    for (uint16_t i = 0; i < gridsize; i++){
+        for (uint16_t j = 0; j < gridsize; j++){
+            universe[i][j].Update();
+        }
+    }
 }
 
 
@@ -66,8 +81,26 @@ Grid::~Grid(){
 
 
 
-
-
+// operators
+std::ostream &operator<<(std::ostream &os, const Grid &Gr)
+{
+    for (uint16_t i = 0; i < Gr.gridsize; i++)
+    {
+        os << "[";
+        for (uint16_t j = 0; j < Gr.gridsize; j++)
+        {
+          os<<Gr.universe[i][j];
+          if (j<Gr.gridsize-1)
+          {
+            os<<',';
+          }
+             
+        }
+        os << "]\n";
+    }
+    
+    return os;
+}
 
 
 

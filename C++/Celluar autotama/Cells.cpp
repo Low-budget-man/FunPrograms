@@ -11,6 +11,21 @@ const char CellChar[] = {
 
 };
 
+void Cell::readNeighbor()
+    {
+        for (uint8_t i = 0; i < 4; i++)
+        {
+            if (NESWcells[i] == nullptr)
+            {
+                NeighborStates[i] = VOID;
+            }
+            else
+            {
+                NeighborStates[i] = NESWcells[i]->CurrentState;
+            }
+        }
+    }
+
 // public functions
 // Cell::Cell()
 // {
@@ -125,6 +140,8 @@ void* Cell::operator new[] (size_t size,CellStates startstate){
     }
     return (void*) newcells;  
 }
+
 void Cell::operator delete[](void* ptr){
     free(ptr);
+    ptr = nullptr;
 }

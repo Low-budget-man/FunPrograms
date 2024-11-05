@@ -21,20 +21,8 @@ private:
     bool Sleeping; // save time by not checking neighbors if the neighbors did not update in last check 
     Cell* NESWcells[4];
     CellStates NeighborStates[4];
-    void readNeighbor()
-    {
-        for (uint8_t i = 0; i < 4; i++)
-        {
-            if (NESWcells[i] == nullptr)
-            {
-                NeighborStates[i] = VOID;
-            }
-            else
-            {
-                NeighborStates[i] = NESWcells[i]->CurrentState;
-            }
-        }
-    }
+    void readNeighbor();
+
 public:
     // class constructors 
     Cell(CellStates startstate = VOID);
