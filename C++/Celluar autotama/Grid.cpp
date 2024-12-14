@@ -3,51 +3,63 @@
 #include <iostream>
 //#define test
 
+//private class functions
+void Grid::Link(Cell* inp,uint16_t x, uint16_t y){
+    Cell* Neighbor;
+    // North
+    if (y==0)
+    {
+        Neighbor = &edge;
+    }
+    else
+    {
+        Neighbor = &universe[x][y-1];
+    }
+    inp->NESWcells[0] = Neighbor;
+    // East
+    if (x==gridsize-1)
+    {
+        Neighbor = &edge;
+    }
+    else
+    {
+        Neighbor = &universe[x+1][y];
+    }
+    inp->NESWcells[1] = Neighbor;
+    // South
+    if (y==gridsize-1)
+    {
+        Neighbor = &edge;
+    }
+    else
+    {
+        Neighbor = &universe[x][y+1];
+    }
+    inp->NESWcells[2] = Neighbor;
+    // West
+    if (x==0)
+    {
+        Neighbor = &edge;
+    }
+    else
+    {
+        Neighbor = &universe[x-1][y];
+    }
+    inp->NESWcells[3] = Neighbor;
+    } 
 
+// Creation and deleation
 Grid::Grid(uint16_t size ,CellStates Gridborder ,CellStates startingstate){
     gridsize = size;
     edge.CurrentState = Gridborder;
     universe = new Cell*[size];
     for (uint16_t i = 0; i < size; i++)
     {
-        universe[i] = new (startingstate) Cell[size];
+        universe[i] = new Cell[size];
         for (uint16_t j = 0; j < size; j++)
         {
             universe[i][j].CurrentState = startingstate;
-            // border logic
-            if (i == 0)
-            {
-                universe[i][j].NESWcells[3] = &edge;
-            }
-            if (j == 0)
-            {
-                universe[i][j].NESWcells[0] = &edge;
-            }
-            if (i == (size-1))
-            {
-                universe[i][j].NESWcells[1] = &edge;
-            }
-            if (j==(size-1))
-            {
-                universe[i][j].NESWcells[2] = &edge;
-            }
-            // now fill out rest of connections
-            if (universe[i][j].NESWcells[0] == nullptr)
-            {
-                universe[i][j].NESWcells[0] = &universe[i][j-1];
-            }
-            if (universe[i][j].NESWcells[1] == nullptr)
-            {
-                universe[i][j].NESWcells[1] = &universe[i+1][j];
-            }
-            if (universe[i][j].NESWcells[2] == nullptr)
-            {
-                universe[i][j].NESWcells[2] = &universe[i][j+1];
-            }
-            if (universe[i][j].NESWcells[3] == nullptr)
-            {
-                universe[i][j].NESWcells[3] = &universe[i-1][j];
-            }
+            Link(&universe[i][j],j,i);
         }
         
     }   
@@ -60,6 +72,8 @@ Grid::~Grid(){
     }
     delete[] universe;
 }
+
+// public class functions
 
 void Grid::step(){
     //very slow update algo can speed up later

@@ -43,7 +43,7 @@ public:
     bool CellBehavior(void);
     // operators ----------------------------------------------------------------------------------------------
     friend std::ostream& operator<<(std::ostream& os, const Cell& cb);
-    static void* operator new[] (size_t size,CellStates startstate);
+    static void* operator new[] (size_t size);
     void operator delete[](void* ptr);
     // Classes that can see inside
     friend class Grid;

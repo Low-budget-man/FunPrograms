@@ -129,13 +129,8 @@ std::ostream &operator<<(std::ostream &os, const Cell &cell)
     return os;
 }
 
-void* Cell::operator new[] (size_t size,CellStates startstate){
-    Cell* newcells = (Cell*) malloc(size * sizeof(Cell));
-    for (size_t i = 0; i < size; i++)
-    {
-        newcells[i].CurrentState = startstate;
-    }
-    return (void*) newcells;  
+void* Cell::operator new[](size_t size){
+    return malloc(size * sizeof(Cell)+1);  
 }
 
 void Cell::operator delete[](void* ptr){
