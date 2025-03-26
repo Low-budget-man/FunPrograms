@@ -14,7 +14,7 @@
 /*******************************************************************************
  * PRIVATE #DEFINES                                                            *
  ******************************************************************************/
-#define MATRIX_TEST
+//#define MATRIX_TEST
 
 /*******************************************************************************
  * PRIVATE TYPEDEFS                                                            *
@@ -86,6 +86,35 @@ Matrix operator+(const MatrixType& scaler, const Matrix& mat){
     return  mat+scaler;
 }
 
+Matrix operator+(const Matrix& M1, const Matrix& M2){
+    if(M1.N != M2.N || M1.M != M2.M){
+        throw range_error("Matrix operator +, matrixes incompatible sizes");
+    }
+    Matrix out(M1);
+    for (uint16_t i = 0; i < M1.N; i++)
+    {
+        for (uint16_t j = 0; j < M1.M; j++)
+        {
+            out.Data[i][j] += M2.Data[i][j];
+        }
+    }
+    return out;
+    
+}
+Matrix operator*(const Matrix& M1, const MatrixType scaler){
+    Matrix out(M1);
+    for (uint16_t i = 0; i < M1.N; i++)
+    {
+        for (uint16_t j = 0; j < M1.M; j++)
+        {
+            out.Data[i][j] *= M1.Data[i][j];
+        }
+    }
+    return out;
+}
+Matrix operator*(const MatrixType scaler, const Matrix& M1){
+    return M1 * scaler;
+}
 Matrix& Matrix::operator=(const Matrix& other){
     if(this != &other){
         this->Data = other.Data;
@@ -96,18 +125,27 @@ Matrix& Matrix::operator=(const Matrix& other){
 }
 ostream& operator<<(ostream& os, const Matrix& mat)
 {
-    os << "[\n";
-    for (uint16_t i = 0; i < mat.N; i++)
+    if (mat.N ==0 || mat.M == 0)
     {
-        for (uint16_t j = 0; j < mat.M; j++)
-        {
-            os << mat.Data[i][j] << ", ";
-        }
-        
-        os << '\n';
+        os<<"[]\n";
     }
-    
-    os << "]\n";
+    else{
+        for (uint16_t i = 0; i < mat.N; i++)
+        {
+            os << '[';
+            for (uint16_t j = 0; j < mat.M; j++)
+            {
+                os << mat.Data[i][j];
+                if (j <mat.M-1)
+                {
+                    os<<", ";
+                }
+                
+            }
+            os << ']';
+            os << '\n';
+        }
+    }
     return os;
 }
 #ifdef MATRIX_TEST
@@ -118,7 +156,11 @@ int main(void){
     Matrix B(5,3);
     Matrix D = B+100;
     Matrix E;
+    Matrix F(10,5);
     E = 2+D;
+    A = D+E;
+    A = F+D;
+
     cout<<A<<B<<D<<E;
     return EXIT_SUCCESS;
 };
