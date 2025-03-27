@@ -41,7 +41,7 @@ public:
     Matrix(uint16_t n,uint16_t m);
     Matrix(const Matrix& Ma);
     ~Matrix();
-
+    
 
     // operators
     // const addition
