@@ -40,6 +40,7 @@ public:
     // size filled with all 0
     Matrix(uint16_t n,uint16_t m);
     Matrix(const Matrix& Ma);
+    Matrix(vector<vector<MatrixType>> input);
     ~Matrix();
 
 
@@ -53,8 +54,8 @@ public:
     // mult scalers
     friend Matrix operator*(const Matrix& M1, const MatrixType scaler);
     friend Matrix operator*(const MatrixType scaler, const Matrix& M1);
-    //mult matrix
-    
+    //mult matrix very important
+    friend Matrix operator*(const Matrix& M1, const Matrix& M2);
     // assignment
     Matrix& operator=(const Matrix& other);
     // display

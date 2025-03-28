@@ -29,3 +29,6 @@ clean:
 test:
 	make
 	valgrind  --leak-check=full --show-leak-kinds=all ./$(MAIN) 
+run: 
+	make
+	./$(MAIN) 

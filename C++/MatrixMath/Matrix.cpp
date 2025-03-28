@@ -63,7 +63,11 @@ Matrix::Matrix(const Matrix& Ma){
     M = Ma.M;
     N = Ma.N;
 }
-
+Matrix::Matrix(vector<vector<MatrixType>> input){
+    Data = input;
+    N = input.size();
+    M = input[0].size();
+}
 Matrix::~Matrix(){
     ;
 }
@@ -107,13 +111,34 @@ Matrix operator*(const Matrix& M1, const MatrixType scaler){
     {
         for (uint16_t j = 0; j < M1.M; j++)
         {
-            out.Data[i][j] *= M1.Data[i][j];
+            out.Data[i][j] *= scaler;
         }
     }
     return out;
 }
 Matrix operator*(const MatrixType scaler, const Matrix& M1){
     return M1 * scaler;
+}
+
+Matrix operator*(const Matrix& M1, const Matrix& M2){
+    // cout << "M1 size = "<<M1.N<<", "<<M1.M<<"\nM2 size = "<<M2.N<<", "<<M2.M<<"\n";
+    if(M1.M != M2.N){
+        throw range_error("Matrix operator *, matrixes incompatible sizes");
+    }
+    uint16_t Loop = M1.M;
+    Matrix out(M1.N,M2.M);
+    for (uint16_t i = 0; i < out.N; i++)
+    {
+        for (uint16_t j = 0; j < out.M; j++)
+        {
+            for (size_t l = 0; l < Loop; l++)
+            {
+                out.Data[i][j] += M1.Data[i][l]*M2.Data[l][j];
+            }
+            
+        }
+    }
+    return out;
 }
 Matrix& Matrix::operator=(const Matrix& other){
     if(this != &other){
