@@ -42,7 +42,7 @@ public:
     Matrix(const Matrix& Ma);
     Matrix(vector<vector<MatrixType>> input);
     ~Matrix();
-
+    
 
     // operators
     // const addition

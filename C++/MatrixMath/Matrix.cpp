@@ -32,7 +32,6 @@
  * PUBLIC FUNCTIONS FUNCTIONS                                                  *
  ******************************************************************************/
 using namespace std;
-
 Matrix::Matrix(){
     N = 0;
     M = 0;
@@ -46,7 +45,6 @@ Matrix::Matrix(){
     Data.shrink_to_fit();
      
 }
-
 Matrix::Matrix(uint16_t n,uint16_t m){
     N=n;
     M=m;
@@ -57,7 +55,6 @@ Matrix::Matrix(uint16_t n,uint16_t m){
     }
     
 }
-
 Matrix::Matrix(const Matrix& Ma){
     Data = Ma.Data;
     M = Ma.M;
@@ -71,7 +68,21 @@ Matrix::Matrix(vector<vector<MatrixType>> input){
 Matrix::~Matrix(){
     ;
 }
-
+void Matrix::T(){
+    // this is slow and not the best with memory 
+    // can improve later
+    Matrix Transpose(M,N);
+    for (uint16_t i = 0; i < N; i++)
+    {
+        for (uint16_t j = 0; j < M; j++)
+        {
+            Transpose.Data[j][i] = Data[i][j];
+        }
+        
+    }
+    this = Transpose;
+    
+}
 Matrix operator+(const Matrix& mat, const MatrixType& scaler){
     Matrix out(mat);
     for (uint16_t i = 0; i < mat.Data.size(); i++)
@@ -85,11 +96,9 @@ Matrix operator+(const Matrix& mat, const MatrixType& scaler){
     return out;
     
 }
-
 Matrix operator+(const MatrixType& scaler, const Matrix& mat){
     return  mat+scaler;
 }
-
 Matrix operator+(const Matrix& M1, const Matrix& M2){
     if(M1.N != M2.N || M1.M != M2.M){
         throw range_error("Matrix operator +, matrixes incompatible sizes");
