@@ -68,20 +68,19 @@ Matrix::Matrix(vector<vector<MatrixType>> input){
 Matrix::~Matrix(){
     ;
 }
-void Matrix::T(){
+Matrix Matrix::T(){
     // this is slow and not the best with memory 
     // can improve later
-    Matrix Transpose(M,N);
+    Matrix out(M,N);
     for (uint16_t i = 0; i < N; i++)
     {
         for (uint16_t j = 0; j < M; j++)
         {
-            Transpose.Data[j][i] = Data[i][j];
+            out.Data[j][i] = Data[i][j];
         }
         
     }
-    this = Transpose;
-    
+    return out;
 }
 Matrix operator+(const Matrix& mat, const MatrixType& scaler){
     Matrix out(mat);
@@ -186,16 +185,12 @@ ostream& operator<<(ostream& os, const Matrix& mat)
 //tests go here
 int main(void){
 
-    Matrix A;
-    Matrix B(5,3);
-    Matrix D = B+100;
-    Matrix E;
-    Matrix F(10,5);
-    E = 2+D;
-    A = D+E;
-    A = F+D;
-
-    cout<<A<<B<<D<<E;
+    Matrix A({{1,1,1},{3,2,1}});
+    Matrix B({{2,83},{1,3},{8,69}});
+    std::cout<<A<<'\n'<<B<<'\n'<<A*B<<'\n';
+    //Matrix Bt = B.T();
+    std::cout<<A.T()<<'\n';
     return EXIT_SUCCESS;
+    
 };
 #endif

@@ -42,8 +42,8 @@ public:
     Matrix(const Matrix& Ma);
     Matrix(vector<vector<MatrixType>> input);
     ~Matrix();
-    
-
+    // Matrix Functions
+    Matrix T(void);
     // operators
     // const addition
     // scalers
