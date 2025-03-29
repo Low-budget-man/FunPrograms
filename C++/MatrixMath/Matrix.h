@@ -51,6 +51,11 @@ public:
     friend Matrix operator+(const MatrixType& scaler, const Matrix& mat);
     // matrix
     friend Matrix operator+(const Matrix& M1, const Matrix& M2);
+    // subtraction 
+    friend Matrix operator- (const Matrix& mat, const MatrixType& scaler);
+    friend Matrix operator-(const MatrixType& scaler, const Matrix& mat);
+    // matrix
+    friend Matrix operator-(const Matrix& M1, const Matrix& M2);
     // mult scalers
     friend Matrix operator*(const Matrix& M1, const MatrixType scaler);
     friend Matrix operator*(const MatrixType scaler, const Matrix& M1);

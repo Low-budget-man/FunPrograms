@@ -113,6 +113,49 @@ Matrix operator+(const Matrix& M1, const Matrix& M2){
     return out;
     
 }
+
+Matrix operator- (const Matrix& mat, const MatrixType& scaler){
+    Matrix out(mat);
+    for (uint16_t i = 0; i < mat.Data.size(); i++)
+    {
+        for (uint16_t j = 0; j < mat.Data[i].size(); j++)
+        {
+            out.Data[i][j] -=  scaler;
+        }
+        
+    }
+    return out;
+    
+}
+Matrix operator-(const MatrixType& scaler, const Matrix& mat){
+    Matrix out(mat);
+    for (uint16_t i = 0; i < mat.Data.size(); i++)
+    {
+        for (uint16_t j = 0; j < mat.Data[i].size(); j++)
+        {
+            out.Data[i][j] =  scaler - out.Data[i][j];
+        }
+        
+    }
+    return out;
+}
+// matrix
+Matrix operator-(const Matrix& M1, const Matrix& M2){
+    if(M1.N != M2.N || M1.M != M2.M){
+        throw range_error("Matrix operator -, matrixes incompatible sizes");
+    }
+    Matrix out(M1);
+    for (uint16_t i = 0; i < M1.N; i++)
+    {
+        for (uint16_t j = 0; j < M1.M; j++)
+        {
+            out.Data[i][j] -= M2.Data[i][j];
+        }
+    }
+    return out;
+    
+}
+
 Matrix operator*(const Matrix& M1, const MatrixType scaler){
     Matrix out(M1);
     for (uint16_t i = 0; i < M1.N; i++)
