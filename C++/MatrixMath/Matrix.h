@@ -44,6 +44,7 @@ public:
     ~Matrix();
     // Matrix Functions
     Matrix T(void);
+    MatrixType det(void);
     // operators
     // const addition
     // scalers

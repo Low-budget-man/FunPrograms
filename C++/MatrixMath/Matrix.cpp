@@ -11,10 +11,11 @@
  * MODULE #INCLUDE                                                             *
  ******************************************************************************/
 #include "Matrix.h"
+#include <cmath>
 /*******************************************************************************
  * PRIVATE #DEFINES                                                            *
  ******************************************************************************/
-//#define MATRIX_TEST
+#define MATRIX_TEST
 
 /*******************************************************************************
  * PRIVATE TYPEDEFS                                                            *
@@ -81,6 +82,52 @@ Matrix Matrix::T(){
         
     }
     return out;
+}
+MatrixType Matrix::det(void){
+    // check to see if square
+    if(M != N){
+        throw range_error("Matrix function det, matrix must be square");
+    }
+    // following code is on the work provided by 
+    // https://www.geeksforgeeks.org/cpp-program-for-determinant-of-a-matrix/
+    static uint16_t DetTrack = 0;
+    uint16_t depth = M - DetTrack;
+    DetTrack++;
+    Matrix submatrix(N,M);
+    MatrixType Det = 0;
+    if (depth == 1)
+    {
+        return Data[0][0];
+    }
+    else if (depth == 2)
+    {
+        return ((Data[0][0] * Data[1][1]) - (Data[1][0] * Data[0][1]));
+    }
+    else
+    {
+        for (uint16_t x = 0; x < depth; x++)
+        {
+            uint16_t subi = 0;
+            for (uint16_t i = 1; i < depth; i++)
+            {
+                uint16_t subj = 0;
+                for (uint16_t j = 0; j < depth; j++)
+                {
+                    if (j==x)
+                    {
+                        continue;
+                    }
+                    submatrix.Data[subi][subj] = Data[i][j];
+                    subj++;
+                }
+                subi++; 
+            }
+            Det = Det + (pow(-1,x)*Data[0][x]*submatrix.det());
+            
+        }
+    }
+    DetTrack = 0;
+    return Det;
 }
 Matrix operator+(const Matrix& mat, const MatrixType& scaler){
     Matrix out(mat);
@@ -224,11 +271,12 @@ ostream& operator<<(ostream& os, const Matrix& mat)
 //tests go here
 int main(void){
 
-    Matrix A({{1,1,1},{3,2,1}});
-    Matrix B({{2,83},{1,3},{8,69}});
-    std::cout<<A<<'\n'<<B<<'\n'<<A*B<<'\n';
-    //Matrix Bt = B.T();
-    std::cout<<A.T()<<'\n';
+    Matrix A({{1, 0, 2, -1},
+        {3, 0, 0, 5},
+        {2, 1, 4, -3},
+        {1, 0, 5, 0}});
+    A.det();
+    std::cout<<A<<A.det()<<'\n';
     return EXIT_SUCCESS;
     
 };
