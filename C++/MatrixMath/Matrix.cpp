@@ -83,52 +83,40 @@ Matrix Matrix::T(){
     }
     return out;
 }
-MatrixType Matrix::det(void){
-    // check to see if square
-    if(M != N){
-        throw range_error("Matrix function det, matrix must be square");
+
+// Function to calculate the determinant using Laplace expansion (for smaller matrices)
+MatrixType Matrix::det(void) {
+    if (N != M) {
+        throw runtime_error("Determinant can only be calculated for square matrices.");
     }
-    // following code is on the work provided by 
-    // https://www.geeksforgeeks.org/cpp-program-for-determinant-of-a-matrix/
-    static uint16_t DetTrack = 0;
-    uint16_t depth = M - DetTrack;
-    DetTrack++;
-    Matrix submatrix(N,M);
-    MatrixType Det = 0;
-    if (depth == 1)
-    {
+    if (N == 1) {
         return Data[0][0];
     }
-    else if (depth == 2)
-    {
-        return ((Data[0][0] * Data[1][1]) - (Data[1][0] * Data[0][1]));
+    if (N == 2) {
+        return Data[0][0] * Data[1][1] - Data[0][1] * Data[1][0];
     }
-    else
-    {
-        for (uint16_t x = 0; x < depth; x++)
-        {
-            uint16_t subi = 0;
-            for (uint16_t i = 1; i < depth; i++)
-            {
-                uint16_t subj = 0;
-                for (uint16_t j = 0; j < depth; j++)
-                {
-                    if (j==x)
-                    {
-                        continue;
-                    }
-                    submatrix.Data[subi][subj] = Data[i][j];
-                    subj++;
-                }
-                subi++; 
+    
+    MatrixType result = 0;
+    for (uint16_t i = 0; i < N; ++i) {
+        // Create a submatrix by removing the first row and the current column
+        Matrix submatrix(N - 1, N - 1);
+        for (uint16_t j = 1; j < N; ++j) {
+            uint16_t colIndex = 0;
+            for (uint16_t k = 0; k < N; ++k) {
+                if (k == i) continue;
+                submatrix.Data[j - 1][colIndex] = Data[j][k];
+                ++colIndex;
             }
-            Det = Det + (pow(-1,x)*Data[0][x]*submatrix.det());
-            
         }
+        
+        // Calculate the determinant of the submatrix and add to the result
+        MatrixType cofactor = (i % 2 == 0) ? Data[0][i] : -Data[0][i];
+        result += cofactor * submatrix.det();
     }
-    DetTrack = 0;
-    return Det;
+    
+    return result;
 }
+
 Matrix operator+(const Matrix& mat, const MatrixType& scaler){
     Matrix out(mat);
     for (uint16_t i = 0; i < mat.Data.size(); i++)
@@ -147,7 +135,7 @@ Matrix operator+(const MatrixType& scaler, const Matrix& mat){
 }
 Matrix operator+(const Matrix& M1, const Matrix& M2){
     if(M1.N != M2.N || M1.M != M2.M){
-        throw range_error("Matrix operator +, matrixes incompatible sizes");
+        throw runtime_error("Matrix operator +, matrixes incompatible sizes");
     }
     Matrix out(M1);
     for (uint16_t i = 0; i < M1.N; i++)
@@ -187,7 +175,7 @@ Matrix operator-(const MatrixType& scaler, const Matrix& mat){
 }
 Matrix operator-(const Matrix& M1, const Matrix& M2){
     if(M1.N != M2.N || M1.M != M2.M){
-        throw range_error("Matrix operator -, matrixes incompatible sizes");
+        throw runtime_error("Matrix operator -, matrixes incompatible sizes");
     }
     Matrix out(M1);
     for (uint16_t i = 0; i < M1.N; i++)
@@ -217,7 +205,7 @@ Matrix operator*(const MatrixType scaler, const Matrix& M1){
 Matrix operator*(const Matrix& M1, const Matrix& M2){
     // cout << "M1 size = "<<M1.N<<", "<<M1.M<<"\nM2 size = "<<M2.N<<", "<<M2.M<<"\n";
     if(M1.M != M2.N){
-        throw range_error("Matrix operator *, matrixes incompatible sizes");
+        throw runtime_error("Matrix operator *, matrixes incompatible sizes");
     }
     uint16_t Loop = M1.M;
     Matrix out(M1.N,M2.M);
@@ -275,8 +263,19 @@ int main(void){
         {3, 0, 0, 5},
         {2, 1, 4, -3},
         {1, 0, 5, 0}});
+    Matrix B({{0.8147,    0.1576,    0.6557,    0.7060,    0.4387,    0.2760,    0.7513,    0.8407,    0.3517,    0.0759},
+    {0.9058,    0.9706,    0.0357,    0.0318,    0.3816,    0.6797,    0.2551,    0.2543,    0.8308,    0.0540},
+    {0.1270,    0.9572,    0.8491,    0.2769,    0.7655,    0.6551,    0.5060,    0.8143,    0.5853,    0.5308},
+    {0.9134,    0.4854,    0.9340,    0.0462,    0.7952,    0.1626,    0.6991,    0.2435,    0.5497,    0.7792},
+    {0.6324,    0.8003,    0.6787,    0.0971,    0.1869,    0.1190,    0.8909,    0.9293,    0.9172,    0.9340},
+    {0.0975,    0.1419,    0.7577,    0.8235,    0.4898,    0.4984,    0.9593,    0.3500,    0.2858,    0.1299},
+    {0.2785,    0.4218,    0.7431,    0.6948,    0.4456,    0.9597,    0.5472,    0.1966,    0.7572,    0.5688},
+    {0.5469,    0.9157,    0.3922,    0.3171,    0.6463,    0.3404,    0.1386,    0.2511,    0.7537,    0.4694},
+    {0.9575,    0.7922,    0.6555,    0.9502,    0.7094,    0.5853,    0.1493,    0.6160,    0.3804,    0.0119},
+    {0.9649,    0.9595,    0.1712,    0.0344,    0.7547,    0.2238,    0.2575,    0.4733,    0.5678,    0.3371}});
     A.det();
     std::cout<<A<<A.det()<<'\n';
+    std::cout<<B<<B.det()<<'\n';
     return EXIT_SUCCESS;
     
 };
